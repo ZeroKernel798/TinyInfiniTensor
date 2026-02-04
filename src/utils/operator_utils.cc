@@ -4,13 +4,34 @@
 namespace infini {
 
 Shape infer_broadcast(const Shape &A, const Shape &B) {
-
     // =================================== 作业 ===================================
     // TODO：对 A 和 B 进行双向广播，返回广播后的形状。
     // REF: https://github.com/onnx/onnx/blob/main/docs/Broadcasting.md
     // =================================== 作业 ===================================
     
-    return {};
+    int rankA = A.size();
+    int rankB = B.size();
+    int maxRank = std::max(rankA, rankB);
+    Shape result(maxRank);
+
+    // 从右往左遍历每一个维度
+    for (int i = 1; i <= maxRank; ++i) {
+        // 获取 A 和 B 在倒数第 i 个维度的大小
+        int dimA = (i <= rankA) ? A[rankA - i] : 1;
+        int dimB = (i <= rankB) ? B[rankB - i] : 1;
+
+        if (dimA == dimB) {
+            result[maxRank - i] = dimA;
+        } else if (dimA == 1) {
+            result[maxRank - i] = dimB;
+        } else if (dimB == 1) {
+            result[maxRank - i] = dimA;
+        } else {
+            // 既不相等也不是 1，说明广播失败了，直接罢工
+            IT_ASSERT(false, "Broadcasting failed: shapes are incompatible.");
+        }
+    }
+    return result;
 }
 
 int get_real_axis(const int &axis, const int &rank) {

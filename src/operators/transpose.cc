@@ -34,7 +34,16 @@ namespace infini
         // REF: https://onnx.ai/onnx/operators/onnx__Transpose.html#transpose-21
         // =================================== 作业 ===================================
 
-        return std::nullopt;
+        // 定义输出
+        Shape output(rank);
+            for (int i = 0; i < rank; ++i) {
+            output[i] = input_dim[this->transposePermute[i]];
+        }
+
+
+        // 返回值是一个 vector<Shape>，因为某些算子可能有多个输出
+        // 对于 Transpose，只有一个输出
+        return {{output}};
     }
 
     std::string TransposeObj::toString() const

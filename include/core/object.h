@@ -14,6 +14,7 @@ class Uid {
     Uid(UidBaseType uid) : uid(uid) {}
     Uid &operator=(const Uid &rhs) = delete;
 
+    // 定义了一个转换行为 
     operator UidBaseType() const { return uid; }
 };
 

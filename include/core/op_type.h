@@ -9,7 +9,9 @@
 namespace infini
 {
     struct OpType
-    {
+    {   
+
+        // 枚举本身有常量属性 属于整个类
         using underlying_t = uint16_t;
         enum : underlying_t
         {
@@ -28,6 +30,7 @@ namespace infini
         } type;
 
         constexpr OpType(decltype(type) t) : type(t) {}
+        // 禁止偷偷转换
         constexpr explicit OpType(underlying_t val) : type((decltype(type))val) {}
         constexpr underlying_t underlying() const { return type; }
 
